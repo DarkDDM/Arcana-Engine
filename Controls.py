@@ -24,23 +24,15 @@ class Control_Driver:
                 for Interpreter in self.Interpreters:
                     #Check if the key in the event is within the interpreters outputs
                     if Event.key in Interpreter.Outputs:
-
-                        Interpreter.Outputs[Event.key] = []
+                        Interpreter.Set_Key(Event.key, True)
                     
             #Check to see if the event is a KeyUp event (Key goes from an on state to an off state)
             if Event.type == pygame.KEYUP:
                 #Check through all interpreters
                 for Interpreter in self.Interpreters:
-                    #Scan through all keys in each interpreter
-                        for Key in range(len(Interpreter.Inputs)):
-                            #If the key matches a key in the interpreter inputs, set the key to off
-                            if Event.key == Interpreter.Inputs[Key]:
-                                Interpreter.Outputs[Key] = 
-
-
-
-    #Intepreter serves as a base class for external interpreter objects. External interpreters will need to inherit
-    #From this class in order to be considered by the control driver on game load.
+                    #If the key matches a key in the interpreter inputs, set the key to off
+                    if Event.key == Interpreter.Inputs[Key]:
+                        Interpreter.Set_Key(Event.key, False)
 
 
 #TODO: Handle Mouse Pos updating
@@ -58,6 +50,8 @@ class Interpreter:
 
     Arg Inputs: python list object containing touples of keyName, kEvent for initialization
                 *Note Pre Init assumes all keys will begin in up state (false)
+    
+    The outputs dict is indexed on the names of the pygame key event objects for easier indexing later
     """
 
     def __init__(self, Inputs):
@@ -118,10 +112,12 @@ class Interpreter:
         if kName in self.Outputs:
             self.Outputs[kName][1] = [kStatus]
 
+    """
+    returns all keys and their statuses from 
+    """
 #Standard WASD input controller with mouse position and various menu keys.
 class Standard_WASD(Interpreter):
     def __init__(self):
-
         #initialize the keys for the interpreter.
         super().__init__([
             [pygame.K_w, "Up"],

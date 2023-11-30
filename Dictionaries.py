@@ -1,17 +1,17 @@
 #This is a list of array objects storing large sets of accessible data via keywords.
 
 Items = [
-    ["Coins", "Items/Coins.png", "A pile of shining coins", 0],
-    ["Glyph", "Items/Glyph.png", "A blank slate of stone, imbued with magical energy by some long forgotten Mage", 1],
-    ["Tablet", "Items/Tablet.png", "A large stone tablet, the focus for glyph magic", 2],
-    ["Health Potion", "Items/Health_Potion.png", "A strange crimson elixir, its contents and age unknown", 3],
-    ["Mana Potion", "Items/Mana_Potion.png", "A strange azure elixir, smells of mint and energy", 4],
-    ["Herb", "Items/Herb.png", "A dried and crumbly set of leaves, bound in twine and smelling of spices", 5],
-    ["Mushroom", "Items/Mushroom.png", "A slimy blue mushroom, old and decaying, but seeming full of power", 6],
-    ["Jewels", "Items/Jewels.png", "A glittering pile of dusty, but still sparkling jewels", 7],
-    ["Mundane Amulet", "Items/Mundane_Amulet.png", "A lustrous gold necklace encrusted with gems and finery", 8],
-    ["Mundane Ring", "Items/Mundane_Ring.png", "A smooth ebony ring, worn with age and abandon", 9],
-    ["Jeweled Goblet", "Items/Jeweled_Goblet.png", "A dusty and decrepit cup, once polished and celebrated", 10]
+    ["Coins", "Arcana-Engine/Items/Coins.png", "A pile of shining coins", 0],
+    ["Glyph", "Arcana-Engine/Items/Glyph.png", "A blank slate of stone, imbued with magical energy by some long forgotten Mage", 1],
+    ["Tablet", "Arcana-Engine/Items/Tablet.png", "A large stone tablet, the focus for glyph magic", 2],
+    ["Health Potion", "Arcana-Engine/Items/Health_Potion.png", "A strange crimson elixir, its contents and age unknown", 3],
+    ["Mana Potion", "Arcana-Engine/Items/Mana_Potion.png", "A strange azure elixir, smells of mint and energy", 4],
+    ["Herb", "Arcana-Engine/Items/Herb.png", "A dried and crumbly set of leaves, bound in twine and smelling of spices", 5],
+    ["Mushroom", "Arcana-Engine/Items/Mushroom.png", "A slimy blue mushroom, old and decaying, but seeming full of power", 6],
+    ["Jewels", "Arcana-Engine/Items/Jewels.png", "A glittering pile of dusty, but still sparkling jewels", 7],
+    ["Mundane Amulet", "Arcana-Engine/Items/Mundane_Amulet.png", "A lustrous gold necklace encrusted with gems and finery", 8],
+    ["Mundane Ring", "Arcana-Engine/Items/Mundane_Ring.png", "A smooth ebony ring, worn with age and abandon", 9],
+    ["Jeweled Goblet", "Arcana-Engine/Items/Jeweled_Goblet.png", "A dusty and decrepit cup, once polished and celebrated", 10]
 ]
 
 Drop_Tables = [

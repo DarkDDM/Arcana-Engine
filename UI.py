@@ -19,8 +19,8 @@ class Menu():
         self.Position = Position
         self.Objects = []
         self.Shown = False
-        self.Text = pygame.font.Font("Fonts/Tangerine-Regular.ttf", 40)
-        self.SmallText = pygame.font.Font("Fonts/Tangerine-Regular.ttf", 20)
+        self.Text = pygame.font.Font("Arcana-Engine/Fonts/Tangerine-Regular.ttf", 40)
+        self.SmallText = pygame.font.Font("Arcana-Engine/Fonts/Tangerine-Regular.ttf", 20)
 
     def Update(self):
         for item in range(len(self.Objects)):
@@ -57,7 +57,7 @@ class Image(UI_Object):
         super().__init__(Position, Size)
         self.Texture.fill((128,128,128,255))
     def LoadFromImages(self, Name):
-        Loaded_Image = pygame.image.load("Artwork/" + Name + ".png")
+        Loaded_Image = pygame.image.load("Arcana-Engine/Artwork/" + Name + ".png")
         self.Texture = Loaded_Image
 
 class Button(UI_Object):

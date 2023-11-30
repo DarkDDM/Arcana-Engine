@@ -182,7 +182,7 @@ class World_Engine:
         self.Graphics_Engine = Graphics_Engine
 
         #Create Preloaded Graphics palletes for faster computation
-        self.Sprite_Pallete = Graphics.Graphics_Legacy.Sprite_Pallete("Sprites")
+        self.Sprite_Pallete = Graphics.Graphics_Legacy.Sprite_Pallete("Arcana-Engine\Sprites")
 
         self.Item_Pallete = Graphics.Graphics_Legacy.Item_Pallete()
 
@@ -205,8 +205,8 @@ class World_Engine:
 
         self.Graphics_Engine.Menus.append(self.Title)
 
-        self.Text_Large = pygame.font.Font("Fonts/Tangerine-Regular.ttf", 40)
-        self.Text_Small = ("Fonts/Tangerine-Regular.ttf", 20)
+        self.Text_Large = pygame.font.Font("Arcana-Engine/Fonts/Tangerine-Regular.ttf", 40)
+        self.Text_Small = ("Arcana-Engine/Fonts/Tangerine-Regular.ttf", 20)
 
     def Update(self):
         self.Control_Drive.Update()

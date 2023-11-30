@@ -12,6 +12,5 @@ def Debug_Queue(Graphics_Engine = None, World_Engine = None):
     while True:
         Clock.tick_busy_loop(60)
         controlDriveTest.Update()
-        controlOut = controlDriveTest.Convert_Keys()
         print("\rMoveVector|(" + str(controlOut[0]) + ")|MousePos(" + str(controlOut[1]) + ")|mouseClick(" + str(controlOut[2]) + ")", end="\r")
     return True

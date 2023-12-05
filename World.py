@@ -182,7 +182,7 @@ class World_Engine:
         self.Graphics_Engine = Graphics_Engine
 
         #Create Preloaded Graphics palletes for faster computation
-        self.Sprite_Pallete = Graphics.Graphics_Legacy.Sprite_Pallete("Arcana-Engine\Sprites")
+        self.Sprite_Pallete = Graphics.Graphics_Legacy.Sprite_Pallete("Arcana-Engine//Sprites")
 
         self.Item_Pallete = Graphics.Graphics_Legacy.Item_Pallete()
 
@@ -201,6 +201,8 @@ class World_Engine:
 
         self.Control_Drive = Controls.Control_Driver()
 
+        self.Control_Drive.Add_Interpreter(Controls.Standard_WASD())
+
         self.Graphics_Engine.Menus.append(self.Inventory)
 
         self.Graphics_Engine.Menus.append(self.Title)
@@ -209,7 +211,7 @@ class World_Engine:
         self.Text_Small = ("Arcana-Engine/Fonts/Tangerine-Regular.ttf", 20)
 
     def Update(self):
-        self.Control_Drive.Update()
+        controlFlags = self.Control_Drive.Update()
         for entityIndep in (self.Entities_Independant):
             entityIndep.Update()
 

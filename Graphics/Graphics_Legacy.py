@@ -144,6 +144,7 @@ class Sprite:
 
 
     def Load_All(self):
+        print(self.Source)
         Sprite_Sources = os.listdir(self.Source)
         for item in Sprite_Sources:
             self.LoadAnimation(item, True, self.Speed)
@@ -247,6 +248,7 @@ class Sprite_Pallete:
 
     #Source Specifies the location of the sprite file
     def __init__(self, Source):
+        print(Source)
         Sprite_List = os.listdir(Source)
         self.Sprites = []
         for item in range(len(Sprite_List)):

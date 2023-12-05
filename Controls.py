@@ -16,23 +16,30 @@ class Control_Driver:
     #Get python event list, and look through the events to find keypresses matching those in
     def Update(self):
         Events = pygame.event.get()
-    #Loop through all recieved events
+        #Loop through all recieved events
+        keyOutDict = {}
         for Event in Events:
             #Check to see if the event is a keydown (Key goes form an off state to an on state)
-            if Event.type == pygame.KEYDOWN:
-                #scan through all interpreters
-                for Interpreter in self.Interpreters:
+            #scan through all interpreters, update keystates within
+            for Interpreter in self.Interpreters:
+                if Event.type == pygame.KEYDOWN:
                     #Check if the key in the event is within the interpreters outputs
                     if Event.key in Interpreter.Outputs:
-                        Interpreter.Set_Key(Event.key, True)
-                    
-            #Check to see if the event is a KeyUp event (Key goes from an on state to an off state)
-            if Event.type == pygame.KEYUP:
-                #Check through all interpreters
-                for Interpreter in self.Interpreters:
+                        Interpreter.setKey(Event.key, True)   
+                #Check to see if the event is a KeyUp event (Key goes from an on state to an off state)
+                if Event.type == pygame.KEYUP:
                     #If the key matches a key in the interpreter inputs, set the key to off
-                    if Event.key == Interpreter.Inputs[Key]:
-                        Interpreter.Set_Key(Event.key, False)
+                    if Event.key in Interpreter.Outputs:
+                        Interpreter.setKey(Event.key, False)
+            #request updated key conversions from the interpreters
+        
+        for Interpreter in self.Interpreters:
+            #this loop will work in the order of the interpreters, expecting minimal overlapp between, but will overwrite data items from previous interpreters
+            newDataItem = Interpreter.convertKeys()
+            for key in newDataItem.keys():
+                keyOutDict[key] = newDataItem[key]
+
+        return keyOutDict
 
 
 #TODO: Handle Mouse Pos updating
@@ -65,27 +72,25 @@ class Interpreter:
 
     """
     Convert_Keys
-    Currently: Returns a list ordered [Movement Vector, Mouse_Pos, Click_Status]
-    Eventually: Returns a dict<String>:Value of vectors and booleans for various control flags
-    Defualt returns an updateVector of [0,0]
+    Returns: a dict with labeled outputs for usefull datasets in the game
     """
-    #Want to replace any reliance on the ordering below with dict calls instead J.M
     #Returns in order (Movement_Vector, Mouse_Pos, Click_Status)
-    def Convert_Keys(self):
+    #
+    def convertKeys(self):
         #eventual output array
-        controlOut = []
+        controlOut = {}
         #check if a move Processing function has been added to this interpreter
-        mousePos = pygame.mouse.get_pos()
-        mouseClick = pygame.mouse.get_pressed()
-        print(mouseClick)
-        return [[0,0], mousePos, mouseClick]
+        controlOut["mousePos"] = (0,0)
+        controlOut["playerMoveVector"] = (0,0)
+        controlOut["clickStatus"] = False
+        return controlOut
        
     """
     Used to add key map pairs to the interpreter post-initializaition
     Accepts kPair: [key name, pygame key object]
     """
     #if the desired kName is in the interpreter map already, replaces it
-    def Add_Key(self, kPair):
+    def addKey(self, kPair):
         kName = kPair[0]
         kEventName = kPair[1]
         self.Outputs[kName] = [kEventName, False]
@@ -94,7 +99,7 @@ class Interpreter:
     removes a key from the interpreter by kName
     """
     #Function removing a key from the interpreter
-    def Remove_Key(self, kName):
+    def removeKey(self, kName):
         if kName in self.Outputs:
             self.Outputs.pop(kName)
 
@@ -102,15 +107,15 @@ class Interpreter:
     retrieves a key from this interpreter by kName
     """
     #Function for reading a keybind in the interpreter (mostly for UI and menu options for the controls)
-    def Get_Key(self, kName):
+    def getKey(self, kName):
         return self.Outputs[kName]
 
     """
     sets the key press status of a key in the interpreter
     """
-    def Set_Key(self, kName, kStatus):
+    def setKey(self, kName, kStatus):
         if kName in self.Outputs:
-            self.Outputs[kName][1] = [kStatus]
+            self.Outputs[kName][1] = kStatus
 
     """
     returns all keys and their statuses from 
@@ -125,6 +130,29 @@ class Standard_WASD(Interpreter):
             [pygame.K_s,"Down"],
             [pygame.K_d,"Right"]
         ])
+
+    def convertKeys(self):
+        interpDataOut = {}
+        #Calculate the players move vector using standard WASD control
+        #here self.getKey(pyganeEvent)[1] returns the click status for given pygame keyEvent
+        moveVector = [0,0]
+        if self.getKey(pygame.K_w)[1]:
+            moveVector[1] += 1
+        if self.getKey(pygame.K_a)[1]:
+            moveVector[0] -= 1
+        if self.getKey(pygame.K_s)[1]:
+            moveVector[1] -= 1
+        if self.getKey(pygame.K_d)[1]:
+            moveVector[0] += 1
+        interpDataOut["playerMoveVector"] = moveVector
+
+        #get the mouse position from pygame
+        interpDataOut["mousePosition"] = pygame.mouse.get_pos()
+
+        #get the mouse clickStatus from pygame
+        interpDataOut["mouseClick"] = pygame.mouse.get_pressed(3)
+
+        return interpDataOut
         
     
 

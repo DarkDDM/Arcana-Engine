@@ -6,11 +6,6 @@ import Controls
 #Debug must be enebaled in order for this quee to be called
 def Debug_Queue(Graphics_Engine = None, World_Engine = None):
     controlDriveTest = Controls.Control_Driver()
-    testInterpreter = Controls.Interpreter([])
+    testInterpreter = Controls.Standard_WASD()
     controlDriveTest.Add_Interpreter(testInterpreter)
-    Clock = pygame.time.Clock()
-    while True:
-        Clock.tick_busy_loop(60)
-        controlDriveTest.Update()
-        print("\rMoveVector|(" + str(controlOut[0]) + ")|MousePos(" + str(controlOut[1]) + ")|mouseClick(" + str(controlOut[2]) + ")", end="\r")
     return True

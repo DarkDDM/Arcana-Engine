@@ -12,6 +12,7 @@ import copy
 import UI
 import random
 import Particles
+import AssetHandler
 
 class Structure:
     def __init__(self, Position, Size, Name):
@@ -181,8 +182,10 @@ class World_Engine:
         #The World Engine acts as a control for the graphics engine, commanding which entities and object get loaded and where.
         self.Graphics_Engine = Graphics_Engine
 
+        WorldAssetManager = AssetHandler.assetLoader()
+        
         #Create Preloaded Graphics palletes for faster computation
-        self.Sprite_Pallete = Graphics.Graphics_Legacy.Sprite_Pallete("Arcana-Engine//Sprites")
+        self.Sprite_Pallete = Graphics.Graphics_Legacy.Sprite_Pallete(WorldAssetManager.getAssetBundles()["Sprites"])
 
         self.Item_Pallete = Graphics.Graphics_Legacy.Item_Pallete()
 
@@ -203,17 +206,19 @@ class World_Engine:
 
         self.Control_Drive.Add_Interpreter(Controls.Standard_WASD())
 
+        #TODO: MOVE THESE TO DEDICATED LOADUP SECTION 
         self.Graphics_Engine.Menus.append(self.Inventory)
 
         self.Graphics_Engine.Menus.append(self.Title)
 
-        self.Text_Large = pygame.font.Font("Arcana-Engine/Fonts/Tangerine-Regular.ttf", 40)
+        self.Text_Large = pygame.font.Font("Arcana-Engine/Assets/Fonts/Tangerine-Regular.ttf", 40)
         self.Text_Small = ("Arcana-Engine/Fonts/Tangerine-Regular.ttf", 20)
 
-    def Update(self):
-        controlFlags = self.Control_Drive.Update()
-        for entityIndep in (self.Entities_Independant):
-            entityIndep.Update()
+    def Update(self, controlsIN = None):
+        if(controlsIN != None):
+            self.Player.Update(controlsIN["playerMoveVector"])
+        return
+        
 
     #Add an independant entity to the world engine
     def AddIndependant(self, Independant_Entity):

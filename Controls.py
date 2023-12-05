@@ -6,9 +6,12 @@ import math
 #The actual control driver class is created with a key reader class and an interpreter class.
 
 class Control_Driver:
-    def __init__(self):
+    def __init__(self, setupConfiguration = None):
         #Create List of interpreters which is empty on initialization
         self.Interpreters = []
+        if(setupConfiguration == "WASDStandard"):
+            wasdInterpreter = Standard_WASD()
+            self.Add_Interpreter(wasdInterpreter)
 
     def Add_Interpreter(self, Interpreter):
         self.Interpreters.append(Interpreter)

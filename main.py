@@ -8,6 +8,7 @@ import pygame
 import Debug
 import Graphics.Graphics_Legacy
 import World
+import Controls
 #initialize overall pygam system
 pygame.init()
 pygame.display.init()
@@ -20,8 +21,10 @@ Screen = Graphics.Graphics_Legacy.Screen_Space(800,450)
 #Calling debug queue causes an importation of all functions in each file simulteaneuously ... very slow
 print("Creating Graphics Engine")
 Graphics_Engine = Graphics.Graphics_Legacy.GraphicsEngine(Screen)
-
+print("Creating World Engine")
 World_Engine = World.World_Engine(Graphics_Engine)
+print("Creating Control Driver")
+Control_Driver = Controls.Control_Driver(setupConfiguration="WASDStandard")
 print("Running Debug")
 print(pygame.display.get_init())
 #Run debug Code if neccessary
@@ -30,7 +33,6 @@ Debug.Debug_Queue(Graphics_Engine)
 #==========================================================
 # Main Loop
 #==========================================================
-
 #Set running parameter until the user asks to quit
 Running = True
 ProfilerShow = True
@@ -45,8 +47,10 @@ while Running:
     if(clockTick >= 1000):
         clockTick = 0
     #================================================================================================
-
-    World_Engine.Update()
+    #update Controls
+    ControlInputs = Control_Driver.Update()
+    World_Engine.Update(controlsIN = ControlInputs)
+    Graphics_Engine.Update()
     pygame.display.flip()
 #when Mainloop is broken, the game quits
 pygame.quit()

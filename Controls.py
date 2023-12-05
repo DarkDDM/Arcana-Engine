@@ -142,11 +142,11 @@ class Standard_WASD(Interpreter):
         if self.getKey(pygame.K_w)[1]:
             moveVector[1] += 1
         if self.getKey(pygame.K_a)[1]:
-            moveVector[0] -= 1
+            moveVector[0] += 1
         if self.getKey(pygame.K_s)[1]:
             moveVector[1] -= 1
         if self.getKey(pygame.K_d)[1]:
-            moveVector[0] += 1
+            moveVector[0] -= 1
         interpDataOut["playerMoveVector"] = moveVector
 
         #get the mouse position from pygame

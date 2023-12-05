@@ -288,7 +288,7 @@ class Screen_Space:
     
 #a 64 by 32 set of pixels used to display textures in the chunk. Works in a similar way to voxels where thee map  is created by various squares.
 class Block(Graphics_Object):
-    def __init__(self,Position,Pallete):
+    def __init__(self,Position,Pallete = None):
         self.Pallete = Pallete
         super().__init__((Position), Pallete.Debug)
 

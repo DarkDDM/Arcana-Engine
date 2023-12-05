@@ -26,11 +26,12 @@ class Structure:
         self.Name = Name
         self.ActiveBound = []
 
-#Defines a 64 by 64 grid of 64 by 64 squares that build the gameworld. They are loaded and unloaded in a 3x3 area with the player positioned in the
+#Defines a grid of squares that build the gameworld. They are loaded and unloaded in a 3x3 area with the player positioned in the
 #center chunk.
 class Chunk(Structure):
-    def __init__(self, Position,Name, Size ,Elevation, Pallete):
-
+    def __init__(self, Position = [0,0], Name = "defualt", Size = [1,1], Elevation = 0, Pallete = None):
+        if(Pallete == None):
+            defualtPallete = Graphics.Graphics_Legacy.Pallete()
         super().__init__(Position, [Size[0] * 32, Size[1] * 32], Name)
 
         #The class maintins two internal variables for the blocks in it, and the 2 chunks it uses as walls if it's elevation is >1
@@ -42,7 +43,7 @@ class Chunk(Structure):
             Block_Row = []
             for Item in range(Size[1]):
                 Block_Position = ((row * 32), (Item * 32))
-                New_Block = Graphics.Block(Block_Position, Pallete)
+                New_Block = Graphics.Graphics_Legacy.Block(Block_Position, defualtPallete)
                 New_Block.SetTexture("Stone")
                 Block_Row.append(New_Block)
 
@@ -141,9 +142,12 @@ class Chunk(Structure):
 
         return Total_Shift
 
+    def shiftPosition(self, vector):
+        self.Position[0] += vector[0]
+        self.Position[1] += vector[1]
 
-
-    def Update(self):
+    def Update(self, moveVector = [0,0]):
+        self.shiftPosition(moveVector)
         return (self.Texture, self.Position)
 
 #This is an abstract class representing a set of chunks, treating them like a single structure, and setting up bounding boxes accordingly based on the hieghtmaps.
@@ -162,22 +166,25 @@ class Map:
             self.Chunks.append(Chunk_Row)
 
 
-#Global World Wrapper for all Objects Static And Dynamic. Each tick Items are First Updated with their Controllers, and then any world shifts are
-#Layered onto the update vectors. When this is all done... Graphics calls its update Process, and all items are drawn to screen in their Required Positions
+"""
+Arcana engine
+World class
+Manages all in world game objects and their virtual representations.
+"""
 class World_Engine:
     def __init__(self,Graphics_Engine):
         #The Lists for all entities loaded into the game which are independant Ie the player, enemies, and structures
         self.Entities_Independant = []
-        #The Lsit of all dependant entities in the game world, such as projectiles, which have an owner that they will not hurt
-        self.Entities_Dependant = []
+        ##The Lsit of all dependant entities in the game world, such as projectiles, which have an owner that they will not hurt
+        #self.Entities_Dependant = []
         #this list for all Structures (World Objects like chunks and things that do not move)
         self.Structures = []
         #List of all static world boundaries in the world, created and stored on world generation as a set of line and rect objects.
-        self.Boundaries = []
+        #self.Boundaries = []
         #List of items on the ground in the game
-        self.Items = []
+        #self.Items = []
         #A lsit of Abstract versions of particles, to be updated by their agents to create effects
-        self.Particles = []
+        #self.Particles = []
 
         #The World Engine acts as a control for the graphics engine, commanding which entities and object get loaded and where.
         self.Graphics_Engine = Graphics_Engine
@@ -187,36 +194,36 @@ class World_Engine:
         #Create Preloaded Graphics palletes for faster computation
         self.Sprite_Pallete = Graphics.Graphics_Legacy.Sprite_Pallete(WorldAssetManager.getAssetBundles()["Sprites"])
 
-        self.Item_Pallete = Graphics.Graphics_Legacy.Item_Pallete()
+        #self.Item_Pallete = Graphics.Graphics_Legacy.Item_Pallete()
 
-        self.Particle_Pallete = Graphics.Graphics_Legacy.Particle_Pallete(5)
+        #self.Particle_Pallete = Graphics.Graphics_Legacy.Particle_Pallete(5)
         
         activeGraphicsSurfaceSize = Graphics_Engine.getSurfaceDim()
         Menu_Size = (activeGraphicsSurfaceSize[0] - 200, activeGraphicsSurfaceSize[1] - 200)
 
         self.Inventory = UI.Inventory((100, 100), Menu_Size)
 
-        self.Title = UI.Title((0,0), (1000,1000))
+        #self.Title = UI.Title((0,0), (1000,1000))
 
         self.Player = Entities.Player((int(activeGraphicsSurfaceSize[0] / 2), int(activeGraphicsSurfaceSize[1] / 2)), self.Sprite_Pallete.GetByName("Player"), self.Inventory)
         self.Entities_Independant.append(self.Player);
         Graphics_Engine.AddBasicEntity(self.Player)
 
-        self.Control_Drive = Controls.Control_Driver()
-
-        self.Control_Drive.Add_Interpreter(Controls.Standard_WASD())
+        self.AddStructure(Chunk([0,0], "TEST", [16,16], 0))
 
         #TODO: MOVE THESE TO DEDICATED LOADUP SECTION 
-        self.Graphics_Engine.Menus.append(self.Inventory)
+        #self.Graphics_Engine.Menus.append(self.Inventory)
 
-        self.Graphics_Engine.Menus.append(self.Title)
+        #self.Graphics_Engine.Menus.append(self.Title)
 
-        self.Text_Large = pygame.font.Font("Arcana-Engine/Assets/Fonts/Tangerine-Regular.ttf", 40)
-        self.Text_Small = ("Arcana-Engine/Fonts/Tangerine-Regular.ttf", 20)
+        #self.Text_Large = pygame.font.Font("Arcana-Engine/Assets/Fonts/Tangerine-Regular.ttf", 40)
+        #self.Text_Small = ("Arcana-Engine/Fonts/Tangerine-Regular.ttf", 20)
 
     def Update(self, controlsIN = None):
         if(controlsIN != None):
             self.Player.Update(controlsIN["playerMoveVector"])
+        for struct in self.Structures:
+            struct.Update(controlsIN["playerMoveVector"])
         return
         
 
